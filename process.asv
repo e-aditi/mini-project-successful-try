@@ -21,7 +21,7 @@ hist_original = imhist(toembed);
 %finding the maximum value of the intensity
 hist_peak=0;
 hist_max=0;
-for i=1:256
+for i=2:256
     if hist_original(i) > hist_max
         hist_max = hist_original(i);
         hist_peak = i;
@@ -169,6 +169,8 @@ end
 
 %retrieve watermark from image
 return_image=water_image;
+disp(intensity);
+return_image;
 f = 0;
 r = 1;
 c = 1;
@@ -189,7 +191,8 @@ if flag ==0
                 result(r,c)=0;
                 c=c+1;
             end
-            if return_image(i,j)==(intensity+2)
+            if return_image(i,j)==(intensity+1)
+                disp('yes in 1')
                 result(r,c)=1;
                 c=c+1;
             end
@@ -220,7 +223,7 @@ if flag == 1
                 result(r,c)=0;
                 c=c+1;
             end
-            if return_image(i,j)==(intensity-2)
+            if return_image(i,j)==(intensity-1)
                 result(r,c)=1;
                 c=c+1;
             end
@@ -235,6 +238,8 @@ if flag == 1
         end
     end
 end
+
+imshow(result); %show 2
 %imshow(result); %show 
 [peaksnr, snr] = psnr(double(wmark), double(result));
 [n, r] = biterr(logical(wmark), logical(result));

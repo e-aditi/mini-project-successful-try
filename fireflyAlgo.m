@@ -15,7 +15,7 @@ VarMax = 1;             % Decision Variables Upper Bound
 
 %% Firefly Algorithm Parameters
 
-MaxIt = 1;         % Maximum Number of Iterations
+MaxIt = 5;         % Maximum Number of Iterations
 
 nPop = 20;            % Number of Fireflies (Swarm Size)
 
@@ -68,7 +68,7 @@ for it = 1:MaxIt
     
     newpop = repmat(firefly, nPop, 1);
     for i = 1:nPop
-        newpop(i).Cost = inf;
+        newpop(i).Cost = -inf;
         for j = 1:nPop
             if pop(j).Cost > pop(i).Cost
                 rij = norm(pop(i).Cf-pop(j).Cf)/dmax;
