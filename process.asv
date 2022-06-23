@@ -386,9 +386,9 @@ end
 [peaksnra, ~] = psnr(double(wmark), double(result));
 [~, ra] = biterr(logical(wmark), logical(result));
 %% applying sharpen attack
-s = sharpenAttack(water_image);
+a = averageFilter(water_image);
 %retrieve watermark from image
-return_image=s;
+return_image=a;
 f = 0;
 r = 1;
 c = 1;
@@ -455,9 +455,9 @@ if flag == 1
         end
     end
 end
-[peaksnrs, ~] = psnr(double(wmark), double(result));
-[~, rs] = biterr(logical(wmark), logical(result));
+[peaksnra, ~] = psnr(double(wmark), double(result));
+[~, ra] = biterr(logical(wmark), logical(result));
 
 %% calculating total cost
-cost = (peaksnrm + peaksnrsap + peaksnra + peaksnrs) + 40 * (rm + rsap + ra + rs);
+cost = (peaksnrm + peaksnrsap + peaksnra) + 40 * (rm + rsap + ra);
 end

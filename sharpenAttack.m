@@ -1,4 +1,4 @@
 %% Sharpening attack strength
-function sharpenImageAttacked = sharpenAttack(watermarked_image,strength)
-sharpenImageAttacked = imsharpen(watermarked_image,'Amount',strength);
+function sharpenImageAttacked = sharpenAttack(watermarked_image)
+sharpenImageAttacked = imsharpen(watermarked_image,'Radius',2,'Amount',1);
 end
