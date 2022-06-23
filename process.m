@@ -166,9 +166,9 @@ end
 
 %hist_embed = imhist(water_image);
 %imshow(water_image); % show 1
-
+m = medianAttack(water_image);
 %retrieve watermark from image
-return_image=water_image;
+return_image=m;
 f = 0;
 r = 1;
 c = 1;
@@ -236,7 +236,80 @@ if flag == 1
     end
 end
 %imshow(result); %show 
-[peaksnr, snr] = psnr(double(wmark), double(result));
-[n, r] = biterr(logical(wmark), logical(result));
-cost = peaksnr + 40 * r;
+[peaksnrm, ~] = psnr(double(wmark), double(result));
+[~, rm] = biterr(logical(wmark), logical(result));
+%cost = peaksnr + 40 * r;
+sap = noiseSaltPepper(water_image);
+%retrieve watermark from image
+return_image=sap;
+f = 0;
+r = 1;
+c = 1;
+result = zeros(cap,cap);
+
+if flag ==0
+    for i=1:rows
+        if f==1
+            break;
+        end
+    
+        for j=1:columns
+            if f==1
+                break;
+            end
+        
+            if return_image(i,j)== intensity
+                result(r,c)=0;
+                c=c+1;
+            end
+            if return_image(i,j)==(intensity+2)
+                result(r,c)=1;
+                c=c+1;
+            end
+            if(c>cap)
+                r=r+1;
+                c=1;
+            end
+            if(r>cap)
+                f=1;
+                break;
+            end
+        end
+    end
+end
+
+if flag == 1
+    for i=1:rows
+        if f==1
+            break;
+        end
+    
+        for j=1:columns
+            if f==1
+                break;
+            end
+        
+            if return_image(i,j)== intensity
+                result(r,c)=0;
+                c=c+1;
+            end
+            if return_image(i,j)==(intensity-2)
+                result(r,c)=1;
+                c=c+1;
+            end
+            if(c>cap)
+                r=r+1;
+                c=1;
+            end
+            if(r>cap)
+                f=1;
+                break;
+            end
+        end
+    end
+end
+%imshow(result); %show 
+[peaksnrsap, ~] = psnr(double(wmark), double(result));
+[~, rsap] = biterr(logical(wmark), logical(result));
+cost = (peaksnrm + peaksnrsap) + 40 * (rm + rsap);
 end
