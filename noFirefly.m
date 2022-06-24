@@ -1,4 +1,4 @@
-videoObject = VideoReader("C:\Users\user\OneDrive\Desktop\Mini Project\video_processing_try\sonyanimation1.wmv");
+videoObject = VideoReader("smurfi2.wmv");
 frames = videoObject.NumFrames;
 video = read(videoObject);
 %k = video(:, :, :, 1);
