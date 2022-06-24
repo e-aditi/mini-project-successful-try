@@ -166,6 +166,78 @@ end
 
 %hist_embed = imhist(water_image);
 %imshow(water_image); % show 1
+%% no attack extraction
+na = water_image;
+return_image = na;
+f = 0;
+r = 1;
+c = 1;
+result = zeros(cap,cap);
+
+if flag ==0
+    for i=1:rows
+        if f==1
+            break;
+        end
+    
+        for j=1:columns
+            if f==1
+                break;
+            end
+        
+            if return_image(i,j)== intensity
+                result(r,c)=0;
+                c=c+1;
+            end
+            if return_image(i,j)==(intensity+2)
+                result(r,c)=1;
+                c=c+1;
+            end
+            if(c>cap)
+                r=r+1;
+                c=1;
+            end
+            if(r>cap)
+                f=1;
+                break;
+            end
+        end
+    end
+end
+
+if flag == 1
+    for i=1:rows
+        if f==1
+            break;
+        end
+    
+        for j=1:columns
+            if f==1
+                break;
+            end
+        
+            if return_image(i,j)== intensity
+                result(r,c)=0;
+                c=c+1;
+            end
+            if return_image(i,j)==(intensity-2)
+                result(r,c)=1;
+                c=c+1;
+            end
+            if(c>cap)
+                r=r+1;
+                c=1;
+            end
+            if(r>cap)
+                f=1;
+                break;
+            end
+        end
+    end
+end
+%imshow(result); %show 
+[peaksnrna, ~] = psnr(double(wmark), double(result));
+[~, rna] = biterr(logical(wmark), logical(result));
 %% performing median attack
 m = medianAttack(water_image);
 %retrieve watermark from image
@@ -237,7 +309,7 @@ if flag == 1
     end
 end
 %imshow(result); %show 
-[peaksnrm, ~] = psnr(double(wmark), double(result));
+%[peaksnrm, ~] = psnr(double(wmark), double(result));
 [~, rm] = biterr(logical(wmark), logical(result));
 %cost = peaksnr + 40 * r;
 %% adding salt and pepper noise
@@ -311,7 +383,7 @@ if flag == 1
     end
 end
 %imshow(result); %show
-[peaksnrsap, ~] = psnr(double(wmark), double(result));
+%[peaksnrsap, ~] = psnr(double(wmark), double(result));
 [~, rsap] = biterr(logical(wmark), logical(result));
 %% applying average filter
 a = averageFilter(water_image);
@@ -383,7 +455,7 @@ if flag == 1
         end
     end
 end
-[peaksnra, ~] = psnr(double(wmark), double(result));
+%[peaksnra, ~] = psnr(double(wmark), double(result));
 [~, ra] = biterr(logical(wmark), logical(result));
 %% applying sharpen attack
 s = sharpenAttack(water_image);
@@ -455,9 +527,9 @@ if flag == 1
         end
     end
 end
-[peaksnrs, ~] = psnr(double(wmark), double(result));
+%[peaksnrs, ~] = psnr(double(wmark), double(result));
 [~, rs] = biterr(logical(wmark), logical(result));
 
 %% calculating total cost
-cost = (peaksnrm + peaksnrsap + peaksnra + peaksnrs) + 40 * (rm + rsap + ra + rs);
+cost = peaksnrna + (50 * (rna + rm + rsap + ra + rs));
 end

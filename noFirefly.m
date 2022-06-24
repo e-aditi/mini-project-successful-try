@@ -1,19 +1,13 @@
-function cost = process(CF)
 videoObject = VideoReader("C:\Users\user\OneDrive\Desktop\Mini Project\video_processing_try\sonyanimation1.wmv");
 frames = videoObject.NumFrames;
 video = read(videoObject);
-k = video(:, :, :, 1);
-toembed = rgb2gray(k);
+%k = video(:, :, :, 1);
+%toembed = rgb2gray(k);
+total_cost = 0.0;
 for x = 1: frames
-    frame = video(:, :, :, x);
-    grayImage = rgb2gray(frame);
-    binaryImage = imbinarize(grayImage);
-    cf = complexityFactor(binaryImage);
-    if cf > CF
-        toembed = grayImage;
-        break;
-    end
-end
+frame = video(:, :, :, x);
+grayImage = rgb2gray(frame);
+toembed = grayImage;
 [rows, columns] = size(toembed);
 %histogram of grayscale image
 hist_original = imhist(toembed);
@@ -531,5 +525,8 @@ end
 [~, rs] = biterr(logical(wmark), logical(result));
 
 %% calculating total cost
-cost = (peaksnrna) + rna + ( * (rm + rsap + ra + rs));
+cost = peaksnrna + (50 * (rna + rm + rsap + ra + rs));
+total_cost = total_cost + cost;
 end
+avg_total_cost = total_cost / x;
+disp(avg_total_cost);
