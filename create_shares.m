@@ -1,4 +1,4 @@
-img = imread("C:\Users\user\OneDrive\Desktop\Mini Project\code tries\toembed_img3.png");
+img = imread("toembed_img3.png");
 grey_image = rgb2gray(img);
 I = imbinarize(grey_image, 0.5);
 %figure

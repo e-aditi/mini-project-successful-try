@@ -1,19 +1,14 @@
-function cost = process(CF)
+function ret = withoutFirefly()
 videoObject = VideoReader("smurfi2.wmv");
 frames = videoObject.NumFrames;
 video = read(videoObject);
-k = video(:, :, :, 1);
-toembed = rgb2gray(k);
+%k = video(:, :, :, 1);
+%toembed = rgb2gray(k);
+total_cost = 0.0;
 for x = 1: frames
-    frame = video(:, :, :, x);
-    grayImage = rgb2gray(frame);
-    binaryImage = imbinarize(grayImage);
-    cf = complexityFactor(binaryImage);
-    if cf > CF
-        toembed = grayImage;
-        %break;
-    end
-end
+frame = video(:, :, :, x);
+grayImage = rgb2gray(frame);
+toembed = grayImage;
 [rows, columns] = size(toembed);
 %histogram of grayscale image
 hist_original = imhist(toembed);
@@ -529,7 +524,85 @@ if flag == 1
 end
 %[peaksnrs, ~] = psnr(double(wmark), double(result));
 [~, rs] = biterr(logical(wmark), logical(result));
+%% performing speckle attack
+s = noiseSpeckle(water_image);
+%retrieve watermark from image
+return_image=s;
+f = 0;
+r = 1;
+c = 1;
+result = zeros(cap,cap);
+
+if flag ==0
+    for i=1:rows
+        if f==1
+            break;
+        end
+    
+        for j=1:columns
+            if f==1
+                break;
+            end
+        
+            if return_image(i,j)== intensity
+                result(r,c)=0;
+                c=c+1;
+            end
+            if return_image(i,j)==(intensity+2)
+                result(r,c)=1;
+                c=c+1;
+            end
+            if(c>cap)
+                r=r+1;
+                c=1;
+            end
+            if(r>cap)
+                f=1;
+                break;
+            end
+        end
+    end
+end
+
+if flag == 1
+    for i=1:rows
+        if f==1
+            break;
+        end
+    
+        for j=1:columns
+            if f==1
+                break;
+            end
+        
+            if return_image(i,j)== intensity
+                result(r,c)=0;
+                c=c+1;
+            end
+            if return_image(i,j)==(intensity-2)
+                result(r,c)=1;
+                c=c+1;
+            end
+            if(c>cap)
+                r=r+1;
+                c=1;
+            end
+            if(r>cap)
+                f=1;
+                break;
+            end
+        end
+    end
+end
+%[peaksnrs, ~] = psnr(double(wmark), double(result));
+[~, rspec] = biterr(logical(wmark), logical(result));
 
 %% calculating total cost
-cost = peaksnrna + (50 * (rna + rm + rsap + ra + rs));
+cost = peaksnrna + (50 * (rna + rm + rsap + ra + rs + rspec));
+total_cost = total_cost + cost;
+end
+avg_total_cost = total_cost / x;
+disp(avg_total_cost);
+values = [rna, rm, rsap, ra, rs, rspec];
+ret = values;
 end

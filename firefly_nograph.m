@@ -52,8 +52,7 @@ BestSol.Cost = -inf;
 % Create Initial Fireflies
 for i = 1:nPop
    pop(i).Cf = unifrnd(VarMin, VarMax, VarSize);
-   k = withFirefly(pop(i).Cf);
-   pop(i).Cost = k(1);
+   pop(i).Cost = process(pop(i).Cf);
    
    if pop(i).Cost >= BestSol.Cost
        BestSol = pop(i);
@@ -64,7 +63,7 @@ end
 BestCost = zeros(MaxIt, 1);
 
 %% Firefly Algorithm Main Loop
-k = zeros(5);
+
 for it = 1:MaxIt
     
     newpop = repmat(firefly, nPop, 1);
@@ -84,8 +83,7 @@ for it = 1:MaxIt
                 newsol.Cf = max(newsol.Cf, VarMin);
                 newsol.Cf = min(newsol.Cf, VarMax);
                 
-                [k, a, b, c, d, e, f] = withFirefly(newsol.Cf);
-                newsol.Cost = k(1);
+                newsol.Cost = process(newsol.Cf);
                 
                 if newsol.Cost >= newpop(i).Cost
                     newpop(i) = newsol;
@@ -121,11 +119,10 @@ for it = 1:MaxIt
 end
 
 %% Results
-% results order:
-% 1. no attack, 2. median attack, 3. salt and pepper noise, 4. average attack, 
-% 5. sharpen attack, 6. speckle noise
-j = withoutFirefly();
-x = [1, 2, 3, 4, 5, 6];
-k = [a, b, c, d, e, f];
-disp(k);
-plot(x, j, x, k)
+
+figure;
+%plot(BestCost, 'LineWidth', 2);
+semilogy(BestCost, 'LineWidth', 2);
+xlabel('Iteration');
+ylabel('Best Cost');
+grid on;
