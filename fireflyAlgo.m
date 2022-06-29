@@ -64,7 +64,7 @@ end
 BestCost = zeros(MaxIt, 1);
 
 %% Firefly Algorithm Main Loop
-k = zeros(5);
+k = zeros(7);
 for it = 1:MaxIt
     
     newpop = repmat(firefly, nPop, 1);
@@ -84,7 +84,7 @@ for it = 1:MaxIt
                 newsol.Cf = max(newsol.Cf, VarMin);
                 newsol.Cf = min(newsol.Cf, VarMax);
                 
-                [k, a, b, c, d, e, f] = withFirefly(newsol.Cf);
+                [k, a, b, c, d, e, f, g] = withFirefly(newsol.Cf);
                 newsol.Cost = k(1);
                 
                 if newsol.Cost >= newpop(i).Cost
@@ -125,7 +125,7 @@ end
 % 1. no attack, 2. median attack, 3. salt and pepper noise, 4. average attack, 
 % 5. sharpen attack, 6. speckle noise
 j = withoutFirefly();
-x = [1, 2, 3, 4, 5, 6];
-k = [a, b, c, d, e, f];
+x = [1, 2, 3, 4, 5, 6, 7];
+k = [a, b, c, d, e, f, g];
 disp(k);
 plot(x, j, x, k)
