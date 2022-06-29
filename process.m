@@ -456,6 +456,7 @@ if flag == 1
     end
 end
 %[peaksnra, ~] = psnr(double(wmark), double(result));
+stack_shares;
 [~, ra] = biterr(logical(wmark), logical(result));
 %% applying sharpen attack
 s = sharpenAttack(water_image);
@@ -528,6 +529,8 @@ if flag == 1
     end
 end
 %[peaksnrs, ~] = psnr(double(wmark), double(result));
+imwrite(result, 'extracted_wm.png');
+stack_shares;
 [~, rs] = biterr(logical(wmark), logical(result));
 
 %% calculating total cost
