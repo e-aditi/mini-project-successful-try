@@ -1,4 +1,4 @@
-# mini-project-successful-try
+# mini-project
 
 Enhancement of security in video communication through visual cryptography and firefly optimization
 
